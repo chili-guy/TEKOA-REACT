@@ -23,10 +23,24 @@ export const EssentialDetails = ({
   const [error, setError] = React.useState<string | null>(null);
 
   const handleRegister = async () => {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName || !trimmedEmail || !password.trim()) {
+      setError("Preencha nome, e-mail e senha para continuar.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      setError("Informe um e-mail válido (ex: nome@dominio.com).");
+      return;
+    }
+    if (password.trim().length < 6) {
+      setError("Crie uma senha com pelo menos 6 caracteres.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
-      await apiPost("/api/register", { name, email, password });
+      await apiPost("/api/register", { name: trimmedName, email: trimmedEmail, password });
       onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao criar conta.");

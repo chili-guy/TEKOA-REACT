@@ -14,6 +14,15 @@ export const Login = ({ onBack, onSuccess }: LoginProps): JSX.Element => {
   const [error, setError] = React.useState<string | null>(null);
 
   const handleLogin = async () => {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password.trim()) {
+      setError("Preencha e-mail e senha para entrar.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      setError("Informe um e-mail válido (ex: nome@dominio.com).");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {

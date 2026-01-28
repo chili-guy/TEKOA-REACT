@@ -1,14 +1,35 @@
+async function parseErrorMessage(response: Response): Promise<string> {
+  const contentType = response.headers.get("content-type") || "";
+  const isJson = contentType.includes("application/json");
+  const data = isJson ? await response.json().catch(() => ({})) : null;
+  const message =
+    data?.error ||
+    data?.message ||
+    (response.status === 404
+      ? "Servidor indisponível. Tente novamente em alguns instantes."
+      : response.status === 401
+        ? "Credenciais inválidas. Confira seu e-mail e senha."
+        : response.status === 403
+          ? "Acesso não autorizado."
+          : "Erro inesperado. Tente novamente.");
+  return message;
+}
+
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(path, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(body),
-  });
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new Error("Não foi possível conectar ao servidor.");
+  }
 
   if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    const message = data?.error || "Erro inesperado.";
+    const message = await parseErrorMessage(response);
     throw new Error(message);
   }
 
@@ -16,10 +37,14 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(path, { credentials: "include" });
+  let response: Response;
+  try {
+    response = await fetch(path, { credentials: "include" });
+  } catch {
+    throw new Error("Não foi possível conectar ao servidor.");
+  }
   if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    const message = data?.error || "Erro inesperado.";
+    const message = await parseErrorMessage(response);
     throw new Error(message);
   }
   return response.json();
