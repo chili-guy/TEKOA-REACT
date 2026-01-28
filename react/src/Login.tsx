@@ -1,4 +1,6 @@
+import React from "react";
 import headerShape from "./header-shape.png";
+import { apiPost } from "./api";
 
 type LoginProps = {
   onBack?: () => void;
@@ -6,6 +8,24 @@ type LoginProps = {
 };
 
 export const Login = ({ onBack, onSuccess }: LoginProps): JSX.Element => {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await apiPost("/api/login", { email, password });
+      onSuccess?.();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao entrar.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-white flex justify-center">
       <div className="w-full max-w-[393px] flex flex-col min-h-screen">
@@ -42,6 +62,8 @@ export const Login = ({ onBack, onSuccess }: LoginProps): JSX.Element => {
                   className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                   placeholder="seuemail@exemplo.com"
                   type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                 />
               </label>
 
@@ -53,15 +75,22 @@ export const Login = ({ onBack, onSuccess }: LoginProps): JSX.Element => {
                   className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                   placeholder="Sua senha"
                   type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                 />
               </label>
+
+              {error ? (
+                <p className="text-sm text-red-600 text-center">{error}</p>
+              ) : null}
 
               <button
                 className="mt-2 w-full h-14 rounded-xl bg-[#2c74e8] text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] transition-transform active:scale-[0.98]"
                 type="button"
-                onClick={onSuccess}
+                onClick={handleLogin}
+                disabled={loading}
               >
-                Entrar
+                {loading ? "Entrando..." : "Entrar"}
               </button>
 
               <button

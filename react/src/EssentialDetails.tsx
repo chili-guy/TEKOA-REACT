@@ -1,4 +1,6 @@
+import React from "react";
 import headerShape from "./header-shape.png";
+import { apiPost } from "./api";
 
 type EssentialDetailsProps = {
   onBack?: () => void;
@@ -9,6 +11,30 @@ export const EssentialDetails = ({
   onBack,
   onSuccess,
 }: EssentialDetailsProps): JSX.Element => {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [passport, setPassport] = React.useState("");
+  const [ageRange, setAgeRange] = React.useState("");
+  const [gender, setGender] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const handleRegister = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await apiPost("/api/register", { name, email, password });
+      onSuccess?.();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao criar conta.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-white flex justify-center">
       <div className="relative w-full max-w-[393px] flex flex-col min-h-screen bg-white overflow-hidden">
@@ -44,6 +70,8 @@ export const EssentialDetails = ({
               <input
                 className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                 placeholder="Digite seu nome completo"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
               />
             </label>
 
@@ -55,6 +83,21 @@ export const EssentialDetails = ({
                 className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                 placeholder="seuemail@exemplo.com"
                 type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+
+            <label className="flex flex-col w-full">
+              <span className="text-[#333D5F] text-base font-medium leading-normal pb-2">
+                Senha
+              </span>
+              <input
+                className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
+                placeholder="Crie uma senha"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </label>
 
@@ -66,6 +109,8 @@ export const EssentialDetails = ({
                 className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                 placeholder="+1 (555) 000-0000"
                 type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
               />
             </label>
 
@@ -76,6 +121,8 @@ export const EssentialDetails = ({
               <input
                 className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                 placeholder="Digite o país"
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
               />
             </label>
 
@@ -86,6 +133,8 @@ export const EssentialDetails = ({
               <input
                 className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 placeholder:text-gray-400 p-4 border border-gray-200 text-base font-normal leading-normal"
                 placeholder="Apenas o número"
+                value={passport}
+                onChange={(event) => setPassport(event.target.value)}
               />
             </label>
 
@@ -94,7 +143,11 @@ export const EssentialDetails = ({
                 Idade
               </span>
               <div className="relative w-full">
-                <select className="w-full appearance-none rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 p-4 border border-gray-200 text-base font-normal leading-normal">
+                <select
+                  className="w-full appearance-none rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 p-4 border border-gray-200 text-base font-normal leading-normal"
+                  value={ageRange}
+                  onChange={(event) => setAgeRange(event.target.value)}
+                >
                   <option value="">Selecione sua idade</option>
                   <option>18-24</option>
                   <option>25-34</option>
@@ -113,7 +166,11 @@ export const EssentialDetails = ({
                 Gênero (Opcional)
               </span>
               <div className="relative w-full">
-                <select className="w-full appearance-none rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 p-4 border border-gray-200 text-base font-normal leading-normal">
+                <select
+                  className="w-full appearance-none rounded-xl text-[#333D5F] bg-[#f6f7f8] focus:outline-0 focus:ring-2 focus:ring-[#2c74e8] h-14 p-4 border border-gray-200 text-base font-normal leading-normal"
+                  value={gender}
+                  onChange={(event) => setGender(event.target.value)}
+                >
                   <option value="">Selecione seu gênero</option>
                   <option>Feminino</option>
                   <option>Masculino</option>
@@ -131,12 +188,16 @@ export const EssentialDetails = ({
 
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
           <div className="mx-auto w-full max-w-[393px] px-4 py-4">
+            {error ? (
+              <p className="mb-2 text-center text-sm text-red-600">{error}</p>
+            ) : null}
             <button
               className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-[#2c74e8] text-white gap-2 text-base font-bold leading-normal tracking-[0.015em]"
-              onClick={onSuccess}
+              onClick={handleRegister}
               type="button"
+              disabled={loading}
             >
-              Continuar
+              {loading ? "Criando conta..." : "Continuar"}
             </button>
           </div>
         </div>
