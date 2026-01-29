@@ -235,7 +235,12 @@ const App = () => {
   }
 
   if (screen === "profile") {
-    return <ProfileScreen onSelectTab={handleTabSelect} />;
+    return (
+      <ProfileScreen
+        onSelectTab={handleTabSelect}
+        onNavigate={(next) => setScreen(next as typeof screen)}
+      />
+    );
   }
 
   if (screen === "profile-details") {
