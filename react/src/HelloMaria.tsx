@@ -193,11 +193,12 @@ export const HelloMaria = ({
   return (
     <div className="min-h-screen w-full bg-[#f7fafd] flex justify-center">
       <div className="w-full max-w-[430px] sm:max-w-[480px] pb-24">
-        <div className="relative w-full aspect-[393/1066]">
-          <HelloMariaSvg className="absolute inset-0 h-full w-full" />
-          <div className="absolute top-0 left-0 right-0 h-[4.5%] bg-[#f7fafd] pointer-events-none" />
-          {/* Oculta navbar do topo do SVG */}
-          <div className="absolute top-[4.5%] left-0 right-0 h-[8%] bg-[#f7fafd] pointer-events-none" />
+        <div className="relative w-full aspect-[393/1066] overflow-hidden">
+          <HelloMariaSvg className="absolute inset-0 h-full w-full object-cover" />
+          {/* Oculta status bar e navbar do topo do SVG */}
+          <div className="absolute top-0 left-0 right-0 h-[12.5%] bg-[#f7fafd] pointer-events-none" />
+          {/* Oculta navbar desenhada na base do SVG — só a nossa BottomNav fica visível */}
+          <div className="absolute bottom-0 left-0 right-0 h-[12%] bg-white pointer-events-none" />
           {hitAreas.map((area) => (
             <button
               key={area.label}
