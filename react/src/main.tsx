@@ -222,6 +222,7 @@ const App = () => {
         onNavigate={(next) => {
           setScreen(next as typeof screen);
         }}
+        onSelectTab={handleTabSelect}
       />
     );
   }

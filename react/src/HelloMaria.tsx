@@ -1,10 +1,15 @@
 import HelloMariaSvg from "../../SVGS/Olá, Maria (1).svg?react";
+import { BottomNav } from "./BottomNav";
 
 type HelloMariaProps = {
   onNavigate?: (screen: string) => void;
+  onSelectTab?: (tab: "home" | "schedule" | "content" | "profile") => void;
 };
 
-export const HelloMaria = ({ onNavigate }: HelloMariaProps): JSX.Element => {
+export const HelloMaria = ({
+  onNavigate,
+  onSelectTab,
+}: HelloMariaProps): JSX.Element => {
   const goDev = () => onNavigate?.("in-development");
   const hitAreas = [
     {
@@ -186,7 +191,7 @@ export const HelloMaria = ({ onNavigate }: HelloMariaProps): JSX.Element => {
 
   return (
     <div className="min-h-screen w-full bg-[#f7fafd] flex justify-center">
-      <div className="w-full max-w-[430px] sm:max-w-[480px]">
+      <div className="w-full max-w-[430px] sm:max-w-[480px] pb-24">
         <div className="relative w-full aspect-[393/1066]">
           <HelloMariaSvg className="absolute inset-0 h-full w-full" />
           <div className="absolute top-0 left-0 right-0 h-[4.5%] bg-[#f7fafd] pointer-events-none" />
@@ -207,6 +212,7 @@ export const HelloMaria = ({ onNavigate }: HelloMariaProps): JSX.Element => {
           ))}
         </div>
       </div>
+      <BottomNav active="home" onSelect={onSelectTab} />
     </div>
   );
 };
