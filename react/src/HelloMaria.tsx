@@ -196,6 +196,8 @@ export const HelloMaria = ({
         <div className="relative w-full aspect-[393/1066]">
           <HelloMariaSvg className="absolute inset-0 h-full w-full" />
           <div className="absolute top-0 left-0 right-0 h-[4.5%] bg-[#f7fafd] pointer-events-none" />
+          {/* Oculta navbar do topo do SVG */}
+          <div className="absolute top-[4.5%] left-0 right-0 h-[8%] bg-[#f7fafd] pointer-events-none" />
           {hitAreas.map((area) => (
             <button
               key={area.label}
