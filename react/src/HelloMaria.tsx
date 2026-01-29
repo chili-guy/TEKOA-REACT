@@ -9,7 +9,7 @@ export const HelloMaria = ({ onNavigate }: HelloMariaProps): JSX.Element => {
 
   return (
     <div className="min-h-screen w-full bg-[#f7fafd] flex justify-center">
-      <div className="w-full max-w-[393px] min-h-screen relative">
+      <div className="w-full max-w-[430px] sm:max-w-[480px] min-h-screen relative">
         <div className="relative">
           <HelloMariaSvg className="w-full h-auto" />
           <div className="absolute top-0 left-0 right-0 h-12 bg-[#f7fafd] pointer-events-none" />
