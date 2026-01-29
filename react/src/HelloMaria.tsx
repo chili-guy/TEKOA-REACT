@@ -11,6 +11,7 @@ export const HelloMaria = ({
   onSelectTab,
 }: HelloMariaProps): JSX.Element => {
   const goDev = () => onNavigate?.("in-development");
+  const goHealthTests = () => onNavigate?.("onboarding-health-tests");
   const hitAreas = [
     {
       label: "Apoio Psicológico (título)",
@@ -207,7 +208,11 @@ export const HelloMaria = ({
               }}
               type="button"
               aria-label={area.label}
-              onClick={goDev}
+              onClick={
+                area.label.includes("Testes de Saúde Mental")
+                  ? goHealthTests
+                  : goDev
+              }
             />
           ))}
         </div>
